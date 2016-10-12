@@ -143,8 +143,4 @@ namespace theWall.Controllers
             return RedirectToAction("Index");
         }
     }
-
-
-
-    
 }
