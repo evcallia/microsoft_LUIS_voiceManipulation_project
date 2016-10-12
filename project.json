@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.0.0",
+      "type": "platform"
+    },
+    "Microsoft.AspNetCore.Mvc": "1.0.0",
+    "Microsoft.AspNetCore.StaticFiles": "1.0.0",
+    "Microsoft.AspNetCore.Session": "1.0.0",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.0.0",
+    "Microsoft.Extensions.Logging.Console": "1.0.0",
+    "MySql.Data.Core" : "7.0.4-IR-191", //use of mysql
+    "Dapper" : "1.50.2",  //use of dapper
+    "CryptoHelper": "2.0.0" // This is our cryptography package
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {}
+  },
+
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "debugType": "portable",
+    "preserveCompilationContext": true
+  }
+}
