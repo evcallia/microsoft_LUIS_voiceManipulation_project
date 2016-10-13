@@ -36,7 +36,7 @@ namespace theWall.Factory
             using (IDbConnection dbConnection = Connection)
             {
                 dbConnection.Open();
-                return dbConnection.Query<Message>("SELECT * FROM messages");
+                return dbConnection.Query<Message>("SELECT * FROM messages ORDER BY updated_at DESC");
             }
         }
          

@@ -7,89 +7,20 @@
     <head>
          <meta charset="UTF-8">
          <title>The Wall</title>
-         <link rel="stylesheet" href="~/css/site.css"/>
+         <link rel="stylesheet" href="~/css/wall.css"/>
          <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.1/css/font-awesome.min.css" />
          <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-         <style type="text/css">
-             body{
-                 background-color: rgb(232, 232, 232);
-             }
-             .container{
-                background-color: #bbdefb;
-             }
-
-			 #record-button{
-                background-color: #bbdefb;
-                text-align: center;
-                border-radius: 15px;
-                border: black solid 2px;
-                width: 150px;
-                height: 150px;
-				font-size: 14px;
-				position: fixed;
-				top: 5em;
-				left: 2em;
-			}
-
-            button{
-                background-color: rgb(255, 214, 0);
-                border: black 1px solid;
-                margin-top: 20px;
-            }
-
-            input[type='submit']{
-                background-color: rgb(255, 242, 195);
-            }
-
-            #header *{
-                display: inline-block;
-            }
-
-            #header p{
-                margin-left: 100px;
-            }
-
-            #header a{
-                margin-left: 50px;
-            }
-
-            h5{
-                margin: 0
-            }
-
-            p{
-                font-size: 16px;
-                margin: 0;
-            }
-
-            .comment_material{
-                position: relative;
-                padding-left: 35px;
-                background-color: rgba(227, 242, 253, 0.51);
-                margin: 0;
-                border-radius: 15px;
-            }
-
-            .message{
-                background-color: #bbdefb;
-                padding-left: 30px;
-                padding-right: 30px;
-            }
-
-            .message_content{
-                margin-left: 20px;
-                padding-bottom: 20px;
-            }
-
-            #new_message{
-                padding-left: 30px
-            }
-		</style>
+         <script src="~/js/wall.js"></script>
     </head>
     <body>
         <div id="record-button">
             <button onclick="startConverting();"><i class="fa fa-microphone"></i></button>
             <p>Click to use voice activation</p>
+            <hr>
+            <p class="directions">To post a <span class="underline">message</span> say something like: "Post message I love exploring this site!"</p>
+            <hr>
+            <p class="directions">To post a <span class="underline">comment</span> say something like: "Add comment to 47, I can post a comment with my voice!" </p>
+            <p>**The number refers to the message id</p>
         </div>
 
         <div id="header">
@@ -124,6 +55,8 @@
                                 <a href="/delete-message/@message.id/" style="font-size: 15px;">Delete Message</a>
                             }
                         </h5>
+                        <p style="font-size: 12px; margin-left: 50px;"> message ID for voice recognition: @Html.DisplayFor(modelItem => message.id)</p>
+                        <p>Message:</p>
                         <p class="message_content">@Html.DisplayFor(modelItem => message.message)</p>
                         <div class="comment_material">
                             @foreach(var comment in ViewBag.comments){
@@ -147,7 +80,7 @@
                                 <form action="/new-comment" method="post">
                                     <input type="hidden" name="message_id" value="@message.id">
                                     <input type="hidden" name="user_id" value="@ViewBag.user_id">
-                                    <textarea name="@message.id" id="" cols="55" rows="10" placeholder="To leave a comment say something like: Add comment to id 17 I can add comments with my voice!"></textarea><br>
+                                    <textarea name="comment" id="@message.id" cols="55" rows="10" placeholder="To leave a comment say something like: Add comment to id @message.id, I can add comments with my voice!"></textarea><br>
                                     <input type="submit" value="Post a comment">
                                 </form>
                             </div>
@@ -156,75 +89,5 @@
                 }
             </div>
         </div>
-
-        <!--speech recognition JS-->
-        <script type="text/javascript">
-             $(document).ready(function () {
-    			function startConverting () {
-    				if('webkitSpeechRecognition' in window){
-    					var speechRecognizer = new webkitSpeechRecognition();
-    					speechRecognizer.continuous = false;
-    					speechRecognizer.interimResults = false;
-    					speechRecognizer.lang = 'en-IN';
-    					speechRecognizer.start();
-
-    					var finalTranscripts = '';
-
-    					speechRecognizer.onresult = function(event){
-    						var interimTranscripts = '';
-    						for(var i = event.resultIndex; i < event.results.length; i++){
-    							var transcript = event.results[i][0].transcript;
-    							transcript.replace("\n", "<br>");
-    							if(event.results[i].isFinal){
-    								finalTranscripts += transcript;
-    							}else{
-    								interimTranscripts += transcript;
-    							}
-    						}
-
-                            //make api call with start
-                            // key: 8f93afbf3c0940bc9e7542d33a971c99
-                            var xhr = new XMLHttpRequest();
-                            finalTranscripts = "add message this is cool"; //TESTING!!!!!!!!!
-                            xhr.open("GET", "https://api.projectoxford.ai/luis/v1/application?id=fae908e1-61ef-49c0-98cc-4c832ce7fc29&subscription-key=29768a93470c4ccda7d46c7023d6adc7&q=" + finalTranscripts, false);
-                            xhr.onload = function (e) {
-                                if (xhr.readyState === 4) {
-                                    if (xhr.status === 200) {
-                                        //parse the json and do all the handling
-                                        var data = JSON.parse(xhr.responseText);
-                                        console.log(data);
-                                        if(data['intents'][0]['intent'] == "AddMessage"){
-
-                                            var message = data['intents'][0]['actions'][0]['parameters'][0]['value'][0]['entity'];
-                                            var textarea = document.getElementById('#new_message textarea');
-                                            console.log(textarea);
-                                            textarea.innerHTML = message;
-
-                                            // var submitButton = document.getElementById('new_message input[type="submit"]');
-                                            // console.log(submitButton);
-
-                                        }else if(data['intents'][0]['intent'] == "PostComment"){
-
-                                        }else if(data['intents'][0]['intent'] == "SignOut"){
-
-                                        }
-                                    } else {
-                                        console.error(xhr.statusText);
-                                    }
-                                }
-                            };
-                            xhr.onerror = function (e) {
-                                console.error(xhr.statusText);
-                            };
-                            xhr.send(null);
-    					};
-    					speechRecognizer.onerror = function (event) {
-    					};
-    				}else{
-                        document.alert("Your browser is not supported");
-    				}
-    			}
-            });
-		</script>
     </body>
 </html>

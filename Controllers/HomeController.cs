@@ -35,7 +35,7 @@ namespace theWall.Controllers
         }
 
         [HttpGet]
-        [Route("/success")]
+        [Route("/wall")]
         public IActionResult Success()
         {   
             if(HttpContext.Session.GetInt32("id") != null){

@@ -1,0 +1,97 @@
+/*Write all of your CSS here*/
+
+
+
+body{
+    background-color: rgb(232, 232, 232);
+}
+
+.container{
+background-color: #bbdefb;
+}
+
+#record-button{
+background-color: #bbdefb;
+text-align: center;
+border-radius: 15px;
+border: black solid 2px;
+width: 150px;
+height: 500px;
+font-size: 14px;
+position: fixed;
+top: 5em;
+left: 2em;
+}
+
+.underline{
+text-decoration: underline;
+}
+
+.directions{
+padding-top: 5px;
+}
+
+button{
+background-color: rgb(255, 214, 0);
+border: black 1px solid;
+margin-top: 20px;
+}
+
+input[type='submit']{
+background-color: rgb(255, 242, 195);
+}
+
+#header *{
+display: inline-block;
+}
+
+#header p{
+margin-left: 100px;
+}
+
+#header a{
+margin-left: 50px;
+}
+
+p{
+font-size: 16px;
+margin: 0;
+}
+
+.comment_material{
+position: relative;
+padding-left: 35px;
+background-color: rgba(227, 242, 253, 0.51);
+margin: 0;
+border-radius: 15px;
+}
+
+.message{
+background-color: #bbdefb;
+padding-left: 30px;
+padding-right: 30px;
+}
+
+.message_content{
+margin-left: 20px;
+padding-bottom: 20px;
+}
+
+#new_message{
+padding-left: 30px
+}
+
+h6{
+margin-top: 10px;
+margin-bottom: 0;
+}
+
+.comment p{
+padding-left: 25px;
+}
+
+hr{
+margin: 0;
+border-color: black;
+margin-top: 5px;
+}
