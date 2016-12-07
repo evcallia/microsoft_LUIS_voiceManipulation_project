@@ -13,7 +13,8 @@ namespace theWall.Factory
 
         public UserRepository()
         {
-            connectionString = "server=localhost;userid=root;password=root;port=8889;database=thewalldb;SslMode=None";
+            // connectionString = "server=localhost;userid=root;password=root;port=8889;database=thewalldb;SslMode=None";
+            connectionString = "server=localhost;userid=root;password=root;port=3306;database=thewalldb;SslMode=None";            
         }
 
         internal IDbConnection Connection
