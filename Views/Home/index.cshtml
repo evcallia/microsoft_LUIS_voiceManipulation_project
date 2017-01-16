@@ -3,31 +3,62 @@
     <head>
          <meta charset="UTF-8">
          <title>Login Registration</title>
+         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
+         <link rel="stylesheet" href="~/css/login.css"/>
     </head>
     <body>
-        <h3>Register</h3>
-        <form action="/register" method="POST">
-            <label>First Name:<input type="text" name="first_name"></label>
-            <label>Last Name:<input type="text" name="last_name"></label>
-            <label>Email:<input type="text" name="email"></label>
-            <label>Password:<input type="text" name="password"></label>
-            <label>Password Confirmation:<input type="text" name="password_confirmation"></label>
-            <input type="submit" value="Register">
-        </form>
-        <h3>Login</h3>
-        <form action="/login" method="post">
-            <label>Email:<input type="email" name="email"></label>
-            <label>Password:<input type="password" name="password"></label>
-            <input type="submit" value="Login">
-        </form>
         <div>
-            @{
-                if(ViewBag.errors != null){
-                    foreach(var error in ViewBag.errors){
-                        <p>@error</p>
+            <div class="titles">
+                <h1>The Wall</h1>
+                <h4>*With Voice Recognition</h4>
+            </div>
+            <div class="forms">
+                <h3>Login</h3>
+                <form action="/login" method="post">
+                    <div class="form-group">
+                        <label for='email'>Email: </label>
+                        <input type="email" class='form-control col-sm-6' name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for='password'>Password: </label>
+                        <input type="password" class='form-control' name="password">
+                    </div>
+                    <button class='btn btn-default' type="submit">Login</button>
+                </form>
+                <h3>Register</h3>
+                <form action="/register" method="POST">
+                    <div class="form-group">
+                        <label for="first_name">First Name: </label>
+                        <input type="text" class='form-control' name="first_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name: </label>
+                        <input type="text" class='form-control' name="last_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email: </label>
+                        <input type="text" class='form-control' name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password: </label>
+                        <input type="text" class='form-control' name="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="password_confirmation">Password Confirmation: </label>
+                        <input type="text" class='form-control' name="password_confirmation">
+                    </div>
+                    <button class='btn btn-default' type="submit">Register</button>
+                </form>
+                <div>
+                    @{
+                        if(ViewBag.errors != null){
+                            foreach(var error in ViewBag.errors){
+                                <p>@error</p>
+                            }
+                        }
                     }
-                }
-            }
+                </div>
+            </div>
         </div>
     </body>
 </html>
