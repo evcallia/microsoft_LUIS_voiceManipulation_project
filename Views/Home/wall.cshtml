@@ -2,92 +2,72 @@
 @using theWall.Factory
 @model IEnumerable<theWall.Models.Message>
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-         <meta charset="UTF-8">
-         <title>The Wall</title>
-         <link rel="stylesheet" href="~/css/wall.css"/>
-         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.1/css/font-awesome.min.css" />
-         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-         <script src="~/js/wall.js"></script>
-    </head>
-    <body>
-        <div id="record-button">
-            <button onclick="startConverting();"><i class="fa fa-microphone"></i></button>
-            <p>Click to use voice activation</p>
-            <hr>
-            <p class="directions">To post a <span class="underline">message</span> say something like: "Post message I love exploring this site!"</p>
-            <hr>
-            <p class="directions">To post a <span class="underline">comment</span> say something like: "Add comment to 47, I can post a comment with my voice!" </p>
-            <p>**The number refers to the message id</p>
-        </div>
+<link rel="stylesheet" href="~/css/wall.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.1/css/font-awesome.min.css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="~/js/wall.js"></script>
 
-        <div id="header">
-            <h3>CodingDojo Wall</h3>
-            <p>Welcome @ViewBag.name</p>
-            <a href="/logoff">Log off</a>
-        </div>
+<div id="record-button">
+    <button onclick="startConverting();"><i class="fa fa-microphone"></i></button>
+    <p>Click to use voice activation</p>
+    <hr>
+    <p class="directions">To post a <span class="underline">message</span> say something like: "Post message I love exploring this site!"</p>
+    <hr>
+    <p class="directions">To post a <span class="underline">comment</span> say something like: "Add comment to 47, I can post a comment with my voice!" </p>
+    <p>**The number refers to the message id</p>
+</div>
+
+<nav id="header">
+    <h3>CodingDojo Wall</h3>
+    <p>Welcome @ViewBag.name</p>
+    <a href="/logoff">Log off</a>
+</nav>
 
 
-        <div class="content">
-            <div id="new_message">
-                <h4>Post a message</h4>
-                <form action="/new-message" method="post">
-                    <input type="hidden" name="user_id" value="@ViewBag.user_id">
-                    <textarea name="message" id="" cols="60" rows="10" placeholder="To post a message say something like: Post message I'm having a great time looking at the Coding Dojo Wall!"></textarea><br>
-                    <input type="submit" value="Post a message">
-                </form>
-            </div>
+<div class="content">
+    <div id="new_message">
+        <h4>Post a message</h4>
+        <form action="/new-message" method="post">
+            <!--<input type="hidden" name="user_id" value="@ViewBag.user_id">-->
+            <textarea name="message" id="" cols="60" rows="10" placeholder="To post a message say something like: Post message I'm having a great time looking at the Coding Dojo Wall!"></textarea><br>
+            <input type="submit" value="Post a message">
+        </form>
+    </div>
 
-            @{
-                var UR = new UserRepository();
-            }
-            <div id="messages">
-                @foreach(var message in Model){
-                    <div class="message">
-                        @{
-                            User messager = UR.FindByID(message.user_id);
-                        }
-                        <h5>
-                            @messager.first_name - @Html.DisplayFor(modelItem => message.updated_at)
-                            @if(messager.id == ViewBag.user_id){
-                                <a href="/delete-message/@message.id/" style="font-size: 15px;">Delete Message</a>
-                            }
-                        </h5>
-                        <p style="font-size: 12px; margin-left: 50px;"> message ID for voice recognition: @Html.DisplayFor(modelItem => message.id)</p>
-                        <p>Message:</p>
-                        <p class="message_content">@Html.DisplayFor(modelItem => message.message)</p>
-                        <div class="comment_material">
-                            @foreach(var comment in ViewBag.comments){
-                                @if(comment.message_id == message.id){
-                                    <div class="comment">
-                                        @{
-                                            User commenter = UR.FindByID(comment.user_id);
-                                        }
-                                        <h6>
-                                            @commenter.first_name - @comment.updated_at
-                                            @if(commenter.id == ViewBag.user_id){
-                                                <a href="/delete-comment/@comment.id/" style="font-size: 12px;">Delete Comment</a>
-                                            }
-                                        </h6>
-                                        <p>@comment.comment</p>
-                                    </div>
+    <div id="messages">
+        @foreach(var message in Model){
+            <div class="message">
+                <h5>
+                    @message.user.first_name - @message.updated_at
+                    @if(message.user.id == ViewBag.user_id){
+                        <a href="/delete-message/@message.id/" style="font-size: 15px;">Delete Message</a>
+                    }
+                </h5>
+                <p style="font-size: 12px; margin-left: 50px;"> message ID for voice recognition: @message.id</p>
+                <p>Message:</p>
+                <p class="message_content">@message.message</p>
+                <div class="comment_material">
+                    @foreach(var comment in message.comments){
+                        <div class="comment">
+                            <h6>
+                                @comment.user.first_name - @comment.updated_at
+                                @if(comment.user.id == ViewBag.user_id){
+                                    <a href="/delete-comment/@comment.id/" style="font-size: 12px;">Delete Comment</a>
                                 }
-                            }
-                            <div class="new_comment">
-                                <h5>Post a Comment</h5>
-                                <form action="/new-comment" method="post">
-                                    <input type="hidden" name="message_id" value="@message.id">
-                                    <input type="hidden" name="user_id" value="@ViewBag.user_id">
-                                    <textarea name="comment" id="@message.id" cols="55" rows="10" placeholder="To leave a comment say something like: Add comment to id @message.id, I can add comments with my voice!"></textarea><br>
-                                    <input type="submit" value="Post a comment">
-                                </form>
-                            </div>
+                            </h6>
+                            <p>@comment.comment</p>
                         </div>
+                    }
+                    <div class="new_comment">
+                        <h5>Post a Comment</h5>
+                        <form action="/new-comment" method="post">
+                            <input type="hidden" name="message_id" value="@message.id">
+                            <textarea name="comment" id="@message.id" cols="55" rows="10" placeholder="To leave a comment say something like: Add comment to id @message.id, I can add comments with my voice!"></textarea><br>
+                            <input type="submit" value="Post a comment">
+                        </form>
                     </div>
-                }
+                </div>
             </div>
-        </div>
-    </body>
-</html>
+        }
+    </div>
+</div>

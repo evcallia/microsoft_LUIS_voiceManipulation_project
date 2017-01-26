@@ -7,19 +7,19 @@ namespace theWall.Models
 
     public class User : BaseEntity
     {
-        [Required]
-        [MinLength(2)]
+        [Required(ErrorMessage = "First name is required")]
+        [MinLength(2, ErrorMessage = "First name must be at least 2 characters")]
         public string first_name { get; set; }
-        [Required]
-        [MinLength(2)]
+        [Required(ErrorMessage = "Last name is required")]
+        [MinLength(2, ErrorMessage = "Last name must be at least 2 characters")]
         public string last_name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
         public string email { get; set; }
-        [Required]
-        [MinLength(8)]
+        [Required(ErrorMessage = "Password is required")]
+        [MinLength(8, ErrorMessage = "Password must be at least 8 characters")]
         public string password { get; set; }
-        [Compare("password", ErrorMessage = "password confirmation does not match")]
+        [Compare("password", ErrorMessage = "Password confirmation does not match")]
         public string password_confirmation { get; set; } 
         public int id { get; set; }
         public DateTime created_at { get; set; }

@@ -41,10 +41,7 @@ namespace theWall.Controllers
             if(HttpContext.Session.GetInt32("id") != null){
                 User user = userRepository.FindByID((int)HttpContext.Session.GetInt32("id"));
                 ViewBag.name = user.first_name;
-                ViewBag.user_id = HttpContext.Session.GetInt32("id");
-
-                ViewBag.comments = commentRepository.FindAll();
-
+                ViewBag.user_id = (int)HttpContext.Session.GetInt32("id");
                 return View("wall", messageRepository.FindAll());
             }
             return RedirectToAction("Index");
@@ -98,16 +95,24 @@ namespace theWall.Controllers
         [Route("new-message")]
         public IActionResult NewMessage(Message newMessage)
         {   
-            messageRepository.Add(newMessage);
-            return RedirectToAction("Success");
+            if(HttpContext.Session.GetInt32("id") != null){
+                newMessage.user_id = (int)HttpContext.Session.GetInt32("id");
+                messageRepository.Add(newMessage);
+                return RedirectToAction("Success");
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
         [Route("new-comment")]
         public IActionResult NewComment(Comment newComment)
         {   
-            commentRepository.Add(newComment);
-            return RedirectToAction("Success");
+            if(HttpContext.Session.GetInt32("id") != null){
+                newComment.user_id = (int)HttpContext.Session.GetInt32("id");
+                commentRepository.Add(newComment);
+                return RedirectToAction("Success");
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -117,7 +122,6 @@ namespace theWall.Controllers
             if(HttpContext.Session.GetInt32("id") == null){
                 return RedirectToAction("Index");
             }
-
             messageRepository.Delete(message_id);
             return RedirectToAction("Success");
         }

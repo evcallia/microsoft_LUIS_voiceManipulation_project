@@ -10,7 +10,8 @@ namespace theWall.Models
         public string comment {get; set;}
 
         [Required]
-        public int user_id {get; set;}      
+        public int user_id {get; set;}    
+        public User user{get; set;}  
 
         [Required]
         public int message_id {get; set;}
